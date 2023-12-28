@@ -8,25 +8,33 @@ namespace VisitorPlacementCore
 {
     public class Visitor
     {
-        public int Id { get; set; }
-        public DateTime TicketBought { get; set; }
-        public bool IsAdult { get; set; }
+        public int VisitorId { get; set; }
+        public int GroupId { get; set; }
+        public string Name { get; set; }
+        public DateTime RegistrationDate { get; set; }
+        public bool IsSeated { get; set; } = false;
+        public bool IsAdult { get; set; } = true;
 
-        public Visitor() { }
-
-        public List<Visitor> CreateVisitors(int amount)
+        public Visitor(string name, int groupid, DateOnly birthdate)
         {
-            List<Visitor> Visitors = new List<Visitor>();
+            Name = name;
+            GroupId = groupid;
 
-            for(int i = 0; i < amount; i++)
+            if (DateTime.Now.Year - birthdate.Year <= 12)
             {
-                Visitor visitor = new()
-                {
-                    Id = i,
-                };
+                IsAdult = false;
+            }
+        }
+
+        // Checks if the registration date has passed
+        public bool CheckIfVisitorOnTime(DateTime eventStartDateTime)
+        {
+            if (eventStartDateTime.Ticks - DateTime.Now.Ticks < 0)
+            {
+                return false;
             }
 
-            return Visitors;
+            return true;
         }
     }
 }
